@@ -1,0 +1,23 @@
+# What Veil masks. Entities not listed here pass through untouched.
+mask:
+  - PERSON
+  - EMAIL_ADDRESS
+  - PHONE_NUMBER
+  - US_SSN
+  - CREDIT_CARD
+  - IBAN_CODE
+  - IP_ADDRESS
+  - LOCATION
+  - ADDRESS
+  - DATE_OF_BIRTH
+  - MEDICAL_RECORD_NUMBER
+  - ACCOUNT_NUMBER
+  - POLICY_NUMBER
+  - US_DRIVER_LICENSE
+  - US_PASSPORT
+  - USERNAME
+# Terms that are never masked, even if a detector flags them (e.g. your own org name).
+allow:
+  - Veil
+# Minimum detector confidence (0-1).
+min_score: 0.5

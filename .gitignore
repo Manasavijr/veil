@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+*.db
+__pycache__/
+.venv/
+venv/
+*.egg-info/
+*.tgz
+eval/results/*.jsonl
+eval/data/
+.pytest_cache/
+.DS_Store

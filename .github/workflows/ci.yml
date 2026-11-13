@@ -1,0 +1,21 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test-and-eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: pip }
+      - run: pip install -e ".[dev,eval,mcp]"
+      - run: python -m spacy download en_core_web_sm
+      - name: Unit tests
+        run: pytest -q
+        env: { VEIL_AUTOSTART: "0" }
+      - name: Leak eval gate (300 ai4privacy examples, regex + Presidio)
+        if: hashFiles('eval/baseline.json') != ''
+        run: python -m eval.detection_eval --n 300 --detectors regex,presidio --gate eval/baseline.json
+        env: { VEIL_SPACY_MODEL: en_core_web_sm }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: eval-results, path: eval/results/ }

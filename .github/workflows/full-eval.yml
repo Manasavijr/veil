@@ -1,0 +1,38 @@
+name: full-eval
+# Manual run: full leak eval (three detector configs) + utility eval through a live Veil gateway.
+# Needs repo secret GROQ_API_KEY for the utility eval.
+on:
+  workflow_dispatch:
+    inputs:
+      n_leak: { description: "ai4privacy examples for leak eval", default: "1000" }
+      n_util: { description: "documents for utility eval", default: "40" }
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      VEIL_UPSTREAM_BASE_URL: https://api.groq.com/openai/v1
+      VEIL_UPSTREAM_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      VEIL_MODEL: llama-3.1-8b-instant
+      VEIL_JUDGE_MODEL: llama-3.3-70b-versatile
+      VEIL_SPACY_MODEL: en_core_web_lg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: pip }
+      - run: pip install -e ".[dev,eval,mcp,gliner]"
+      - run: python -m spacy download en_core_web_lg
+      - name: Leak eval ablation
+        run: |
+          for d in regex regex,presidio regex,presidio,gliner; do
+            python -m eval.detection_eval --n ${{ inputs.n_leak }} --split validation --detectors $d
+          done
+      - name: Utility eval (raw vs. through Veil)
+        if: env.VEIL_UPSTREAM_API_KEY != ''
+        run: |
+          VEIL_DETECTORS=regex,presidio,gliner uvicorn veil.gateway:app --port 8000 &
+          for i in $(seq 1 60); do curl -sf localhost:8000/healthz && break; sleep 5; done
+          python -m eval.utility_eval --n ${{ inputs.n_util }} --veil http://localhost:8000/v1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: full-eval-results, path: eval/results/ }

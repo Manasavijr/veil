@@ -1,0 +1,82 @@
+{
+  "dataset": "ai4privacy/pii-masking-400k",
+  "split": "validation",
+  "examples": 1000,
+  "detectors": "regex,presidio",
+  "recall_overall": 0.5845493562231759,
+  "residual_leak_rate": 0.36738197424892705,
+  "examples_with_any_leak": 0.343,
+  "precision_overlap": 0.4462860650705955,
+  "latency_ms_p50": 8.729325500041796,
+  "latency_ms_p95": 14.773833350034238,
+  "per_label": {
+    "GIVENNAME": {
+      "recall": 0.6708074534161491,
+      "support": 161
+    },
+    "SURNAME": {
+      "recall": 0.6165413533834586,
+      "support": 133
+    },
+    "CITY": {
+      "recall": 0.6826923076923077,
+      "support": 104
+    },
+    "USERNAME": {
+      "recall": 0.25252525252525254,
+      "support": 99
+    },
+    "EMAIL": {
+      "recall": 0.9885057471264368,
+      "support": 87
+    },
+    "TELEPHONENUM": {
+      "recall": 0.5066666666666667,
+      "support": 75
+    },
+    "BUILDINGNUM": {
+      "recall": 0.16901408450704225,
+      "support": 71
+    },
+    "ACCOUNTNUM": {
+      "recall": 0.7241379310344828,
+      "support": 58
+    },
+    "IDCARDNUM": {
+      "recall": 0.5344827586206896,
+      "support": 58
+    },
+    "ZIPCODE": {
+      "recall": 0.2962962962962963,
+      "support": 54
+    },
+    "DATEOFBIRTH": {
+      "recall": 0.8235294117647058,
+      "support": 51
+    },
+    "SOCIALNUM": {
+      "recall": 0.9583333333333334,
+      "support": 48
+    },
+    "STREET": {
+      "recall": 0.14285714285714285,
+      "support": 42
+    },
+    "TAXNUM": {
+      "recall": 0.9024390243902439,
+      "support": 41
+    },
+    "DRIVERLICENSENUM": {
+      "recall": 0.6,
+      "support": 30
+    },
+    "PASSWORD": {
+      "recall": 0.03333333333333333,
+      "support": 30
+    },
+    "CREDITCARDNUMBER": {
+      "recall": 0.8695652173913043,
+      "support": 23
+    }
+  }
+}
